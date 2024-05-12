@@ -8,6 +8,7 @@ import type {MenuInfo} from 'rc-menu/lib/interface';
 import React, {useCallback} from 'react';
 import {flushSync} from 'react-dom';
 import HeaderDropdown from '../HeaderDropdown';
+import {userLogoutUsingPost} from "@/services/api-backend/userController";
 
 export type GlobalHeaderRightProps = {
   menu?: boolean;
@@ -16,8 +17,8 @@ export type GlobalHeaderRightProps = {
 
 export const AvatarName = () => {
   const {initialState} = useModel('@@initialState');
-  const {currentUser} = initialState || {};
-  return <span className="anticon">{currentUser?.name}</span>;
+  const {loginUser} = initialState || {};
+  return <span className="anticon">{loginUser?.userName}</span>;
 };
 
 const useStyles = createStyles(({token}) => {
@@ -65,11 +66,11 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({menu, children
   const onMenuClick = useCallback(
     (event: MenuInfo) => {
       const {key} = event;
-      if (key === 'logout') {
+      if (key === '') {
         flushSync(() => {
           setInitialState((s) => ({...s, currentUser: undefined}));
         });
-        loginOut();
+        userLogoutUsingPost();
         return;
       }
       history.push(`/account/${key}`);
@@ -93,9 +94,9 @@ export const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({menu, children
     return loading;
   }
 
-  const {currentUser} = initialState;
+  const {loginUser} = initialState;
 
-  if (!currentUser || !currentUser.name) {
+  if (!loginUser || !loginUser.userName) {
     return loading;
   }
 
