@@ -35,7 +35,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     /**
      * 盐值，混淆密码
      */
-    private static final String SALT = "yupi";
+    private static final String SALT = "liuashuo";
 
     @Override
     public long userRegister(String userAccount, String userPassword, String checkPassword) {
@@ -84,7 +84,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (userAccount.length() < 4) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号错误");
         }
-        if (userPassword.length() < 8) {
+        if (userPassword.length() < 6) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码错误");
         }
         // 2. 加密
