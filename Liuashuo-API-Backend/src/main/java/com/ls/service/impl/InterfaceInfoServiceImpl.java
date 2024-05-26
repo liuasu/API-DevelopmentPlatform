@@ -1,16 +1,11 @@
 package com.ls.service.impl;
 
-import java.util.Date;
-
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ls.common.ErrorCode;
 import com.ls.exception.BusinessException;
 import com.ls.mapper.InterfaceInfoMapper;
 import com.ls.model.entity.InterfaceInfo;
-import com.ls.model.enums.PostGenderEnum;
-import com.ls.model.enums.PostReviewStatusEnum;
 import com.ls.service.InterfaceInfoService;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -31,12 +26,11 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         String url = interfaceInfo.getUrl();
         String requestHeader = interfaceInfo.getRequestHeader();
         String responseHeader = interfaceInfo.getResponseHeader();
-        Integer status = interfaceInfo.getStatus();
         String method = interfaceInfo.getMethod();
 
         // 创建时，所有参数必须非空
         if (isAdd) {
-            if (StringUtils.isAnyBlank(name, description, url, requestHeader, responseHeader, method) || ObjectUtils.anyNull(status)) {
+            if (StringUtils.isAnyBlank(name, description, url, requestHeader, responseHeader, method) ) {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR);
             }
         }
