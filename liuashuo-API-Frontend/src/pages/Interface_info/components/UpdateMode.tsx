@@ -1,5 +1,5 @@
 import '@umijs/max';
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import {type ProColumns, ProTable} from "@ant-design/pro-components";
 import {Modal} from "antd";
 
@@ -15,9 +15,18 @@ export type Props = {
   onCancel: (flag?: boolean, formVals?: FormValueType) => void;
   onSubmit: (values: API.InterfaceInfo) => Promise<void>;
   visible: boolean;
+  values: API.InterfaceInfo;
 };
 const CreatMode: React.FC<Props> = (props) => {
-  const {columns, visible, onSubmit, onCancel} = props;
+  const {columns, visible, onSubmit, onCancel, values} = props;
+
+  const ref = useRef<any>();
+  useEffect(() => {
+    if (ref) {
+      ref.current?.setFieldsValue(values);
+    }
+  }, [values])
+
   return <Modal visible={visible}
                 onCancel={() => {
                   onCancel?.()
@@ -29,6 +38,7 @@ const CreatMode: React.FC<Props> = (props) => {
               onSubmit={async (value) => {
                 onSubmit?.(value)
               }}
+              formRef={ref}
     />
   </Modal>
 };
