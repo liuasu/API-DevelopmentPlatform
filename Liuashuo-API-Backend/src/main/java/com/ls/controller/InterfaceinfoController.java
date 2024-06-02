@@ -3,13 +3,11 @@ package com.ls.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ls.annotation.AuthCheck;
-import com.ls.common.BaseResponse;
-import com.ls.common.DeleteRequest;
-import com.ls.common.ErrorCode;
-import com.ls.common.ResultUtils;
+import com.ls.common.*;
 import com.ls.constant.CommonConstant;
 import com.ls.exception.BusinessException;
 import com.ls.model.dto.interfaceinfo.InterfaceinfoAddRequest;
+import com.ls.model.dto.interfaceinfo.InterfaceinfoInvokeRequest;
 import com.ls.model.dto.interfaceinfo.InterfaceinfoQueryRequest;
 import com.ls.model.dto.interfaceinfo.InterfaceinfoUpdateRequest;
 import com.ls.model.entity.InterfaceInfo;
@@ -108,7 +106,7 @@ public class InterfaceinfoController {
      */
     @PostMapping("/update")
     public BaseResponse<Boolean> updateInterfaceinfo(@RequestBody InterfaceinfoUpdateRequest interfaceinfoUpdateRequest,
-                                            HttpServletRequest request) {
+                                                     HttpServletRequest request) {
         if (interfaceinfoUpdateRequest == null || interfaceinfoUpdateRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -199,4 +197,67 @@ public class InterfaceinfoController {
 
     // endregion
 
+    /**
+     * 发布接口
+     *
+     * @param request   请求
+     * @param idRequest ID 请求
+     * @return {@link BaseResponse}<{@link Boolean}>
+     */
+    @AuthCheck(mustRole = "admin")
+    @PostMapping("/publish")
+    public BaseResponse<Boolean> publishInterfaceinfo(@RequestBody IdRequest idRequest, HttpServletRequest request) {
+        Long id = idRequest.getId();
+        if (id <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        Boolean result = Interfaceinfo.publishInterface(id);
+        return ResultUtils.success(result);
+    }
+
+    /**
+     * 停止接口
+     *
+     * @param request   请求
+     * @param idRequest ID 请求
+     * @return {@link BaseResponse}<{@link Boolean}>
+     */
+    @AuthCheck(mustRole = "admin")
+    @PostMapping("/offline")
+    public BaseResponse<Boolean> offlineInterfaceinfo(@RequestBody IdRequest idRequest, HttpServletRequest request) {
+        Long id = idRequest.getId();
+        if (id <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        Boolean result = Interfaceinfo.offlineInterface(id);
+        return ResultUtils.success(result);
+    }
+
+    /**
+     * 接口调用
+     *
+     * @param request                    请求
+     * @param interfaceinfoInvokeRequest interfaceinfo 调用请求
+     * @return {@link BaseResponse}<{@link Object}>
+     */
+    @PostMapping("/invoke")
+    public BaseResponse<Object> interfaceinfoInvoke(@RequestBody InterfaceinfoInvokeRequest interfaceinfoInvokeRequest, HttpServletRequest request) {
+        if (interfaceinfoInvokeRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        Long id = interfaceinfoInvokeRequest.getId();
+        String requestParams = interfaceinfoInvokeRequest.getRequestParams();
+        if (id == 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        if (requestParams == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User loginUser = userService.getLoginUser(request);
+        if (loginUser == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
+        }
+        Object obj = Interfaceinfo.invokeInterface(interfaceinfoInvokeRequest,loginUser);
+        return ResultUtils.success(obj);
+    }
 }
