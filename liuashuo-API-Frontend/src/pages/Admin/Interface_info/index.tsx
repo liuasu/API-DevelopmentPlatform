@@ -8,11 +8,13 @@ import {
   addInterfaceinfoUsingPost,
   deleteInterfaceinfoUsingPost,
   listInterfaceinfoByPageUsingGet,
+  offlineInterfaceinfoUsingPost,
+  publishInterfaceinfoUsingPost,
   updateInterfaceinfoUsingPost
 } from "@/services/api-backend/interfaceinfoController";
 import type {SortOrder} from "antd/lib/table/interface";
-import CreatMode from "@/pages/Interface_info/components/CreatMode";
-import UpdateMode from "@/pages/Interface_info/components/UpdateMode";
+import CreatMode from "@/pages/Admin/Interface_info/components/CreatMode";
+import UpdateMode from "@/pages/Admin/Interface_info/components/UpdateMode";
 
 const TableList: React.FC = () => {
   /**
@@ -27,8 +29,8 @@ const TableList: React.FC = () => {
   const [updateModalOpen, handleUpdateModalOpen] = useState<boolean>(false);
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
-  const [selectedRowsState, setSelectedRows] = useState<API.RuleListItem[]>([]);
+  const [currentRow, setCurrentRow] = useState<API.InterfaceInfo>();
+  const [selectedRowsState, setSelectedRows] = useState<API.InterfaceInfo[]>([]);
 
   /**
    * @en-US Add node
@@ -61,9 +63,12 @@ const TableList: React.FC = () => {
    */
   const handleUpdate = async (fields: API.InterfaceInfo) => {
     const hide = message.loading('编辑');
-    console.log(fields)
+    if (!currentRow) {
+      return;
+    }
     try {
       await updateInterfaceinfoUsingPost({
+        id: currentRow?.id,
         ...fields
       });
       hide();
@@ -101,6 +106,53 @@ const TableList: React.FC = () => {
   };
 
   /**
+   *
+   * @zh-CN 下线
+   *
+   * @param fields
+   */
+  const handleOffline = async (fields: API.IdRequest) => {
+    const hide = message.loading('操作中');
+    if (!fields) return true;
+    try {
+      await offlineInterfaceinfoUsingPost({
+        id: fields.id
+      });
+      hide();
+      message.success('操作成功');
+      actionRef.current?.reload();
+      return true;
+    } catch (error: any) {
+      hide();
+      message.error('操作失败，' + error.message);
+      return false;
+    }
+  };
+
+  /**
+   * @zh-CN 发布
+   *
+   * @param fields
+   */
+  const handlePublish = async (fields: API.IdRequest) => {
+    const hide = message.loading('发布中');
+    if (!fields) return true;
+    try {
+      await publishInterfaceinfoUsingPost({
+        id: fields.id
+      });
+      hide();
+      message.success('操作成功');
+      actionRef.current?.reload();
+      return true;
+    } catch (error: any) {
+      hide();
+      message.error('操作失败，' + error.message);
+      return false;
+    }
+  };
+
+  /**
    * @en-US International configuration
    * @zh-CN 国际化配置
    * */
@@ -124,6 +176,16 @@ const TableList: React.FC = () => {
       }
     },
     {
+      title: '请求类型',
+      dataIndex: 'method',
+      valueType: 'text',
+      formItemProps: {
+        rules: [
+          {required: true}
+        ]
+      }
+    },
+    {
       title: '接口地址',
       dataIndex: 'url',
       valueType: 'textarea',
@@ -134,9 +196,9 @@ const TableList: React.FC = () => {
       }
     },
     {
-      title: '请求方法',
-      dataIndex: 'method',
-      valueType: 'text',
+      title: '请求参数',
+      dataIndex: 'requestParams',
+      valueType: 'jsonCode',
       formItemProps: {
         rules: [
           {required: true}
@@ -146,7 +208,7 @@ const TableList: React.FC = () => {
     {
       title: '请求头',
       dataIndex: 'requestHeader',
-      valueType: 'textarea',
+      valueType: 'jsonCode',
       formItemProps: {
         rules: [
           {required: true}
@@ -156,7 +218,7 @@ const TableList: React.FC = () => {
     {
       title: '响应头',
       dataIndex: 'responseHeader',
-      valueType: 'textarea',
+      valueType: 'jsonCode',
       formItemProps: {
         rules: [
           {required: true}
@@ -202,7 +264,8 @@ const TableList: React.FC = () => {
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
-        <a
+        <Button
+          type="text"
           key="config"
           onClick={() => {
             handleUpdateModalOpen(true);
@@ -210,15 +273,37 @@ const TableList: React.FC = () => {
           }}
         >
           修改
-        </a>,
-        <a
+        </Button>,
+        // eslint-disable-next-line eqeqeq
+        record.status == 0 ? <Button
+          type="text"
+          key="config"
+          onClick={() => {
+            handlePublish(record)
+          }}
+        >
+          发布
+        </Button> : null,
+        record.status == 1 ? <Button
+          type="text"
+          danger
+          key="config"
+          onClick={() => {
+            handleOffline(record)
+          }}
+        >
+          下线
+        </Button> : null,
+        <Button
+          type="text"
+          danger
           key="config"
           onClick={() => {
             handleRemove(record)
           }}
         >
           删除
-        </a>,
+        </Button>,
       ],
     },
   ];

@@ -2,7 +2,7 @@
 /* eslint-disable */
 import {request} from '@umijs/max';
 
-/** addInterface POST /api/interfaceinfo/add */
+/** addInterfaceinfo POST /api/interfaceinfo/add */
 export async function addInterfaceinfoUsingPost(
   body: API.InterfaceinfoAddRequest,
   options?: { [key: string]: any },
@@ -17,7 +17,7 @@ export async function addInterfaceinfoUsingPost(
   });
 }
 
-/** deleteInterface POST /api/interfaceinfo/delete */
+/** deleteInterfaceinfo POST /api/interfaceinfo/delete */
 export async function deleteInterfaceinfoUsingPost(
   body: API.DeleteRequest,
   options?: { [key: string]: any },
@@ -32,7 +32,7 @@ export async function deleteInterfaceinfoUsingPost(
   });
 }
 
-/** getInterfaceById GET /api/interfaceinfo/get */
+/** getInterfaceinfoById GET /api/interfaceinfo/get */
 export async function getInterfaceinfoByIdUsingGet(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.getInterfaceinfoByIdUsingGETParams,
@@ -47,7 +47,22 @@ export async function getInterfaceinfoByIdUsingGet(
   });
 }
 
-/** listInterface GET /api/interfaceinfo/list */
+/** interfaceinfoInvoke POST /api/interfaceinfo/invoke */
+export async function interfaceinfoInvokeUsingPost(
+  body: API.InterfaceinfoInvokeRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponseobject>('/api/interfaceinfo/invoke', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** listInterfaceinfo GET /api/interfaceinfo/list */
 export async function listInterfaceinfoUsingGet(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.listInterfaceinfoUsingGETParams,
@@ -62,7 +77,7 @@ export async function listInterfaceinfoUsingGet(
   });
 }
 
-/** listInterfaceByPage GET /api/interface/list/page */
+/** listInterfaceinfoByPage GET /api/interfaceinfo/list/page */
 export async function listInterfaceinfoByPageUsingGet(
   // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
   params: API.listInterfaceinfoByPageUsingGETParams,
@@ -73,6 +88,36 @@ export async function listInterfaceinfoByPageUsingGet(
     params: {
       ...params,
     },
+    ...(options || {}),
+  });
+}
+
+/** offlineInterfaceinfo POST /api/interfaceinfo/offline */
+export async function offlineInterfaceinfoUsingPost(
+  body: API.IdRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponseboolean>('/api/interfaceinfo/offline', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
+/** publishInterfaceinfo POST /api/interfaceinfo/publish */
+export async function publishInterfaceinfoUsingPost(
+  body: API.IdRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponseboolean>('/api/interfaceinfo/publish', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   });
 }

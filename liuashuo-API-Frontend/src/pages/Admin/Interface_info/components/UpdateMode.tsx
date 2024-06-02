@@ -19,7 +19,6 @@ export type Props = {
 };
 const CreatMode: React.FC<Props> = (props) => {
   const {columns, visible, onSubmit, onCancel, values} = props;
-
   const ref = useRef<any>();
   useEffect(() => {
     if (ref) {

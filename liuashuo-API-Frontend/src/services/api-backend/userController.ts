@@ -2,6 +2,18 @@
 /* eslint-disable */
 import {request} from '@umijs/max';
 
+/** user POST /api/user/a */
+export async function userUsingPost(body: API.User, options?: { [key: string]: any }) {
+  return request<string>('/api/user/a', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** addUser POST /api/user/add */
 export async function addUserUsingPost(body: API.UserAddRequest, options?: { [key: string]: any }) {
   return request<API.BaseResponselong>('/api/user/add', {
