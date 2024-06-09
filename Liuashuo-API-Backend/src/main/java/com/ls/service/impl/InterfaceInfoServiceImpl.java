@@ -12,15 +12,21 @@ import com.ls.model.entity.InterfaceInfo;
 import com.ls.model.entity.User;
 import com.ls.service.InterfaceInfoService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, InterfaceInfo> implements InterfaceInfoService {
 
     @Resource
     private LiuAShuoClient liuAShuoClient;
+
+    @Value("${liuashuo.client.url}")
+    private String clientUrl;
 
 
     /**
@@ -109,18 +115,38 @@ public class InterfaceInfoServiceImpl extends ServiceImpl<InterfaceInfoMapper, I
         Long id = interfaceinfoInvokeRequest.getId();
         String requestParams = interfaceinfoInvokeRequest.getRequestParams();
         InterfaceInfo info = this.getById(id);
-        if(info == null){
+        if (info == null) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
-        if(info.getStatus()!=InterfaceInfoStatuEnum.PUBLISH.getCode()){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR,"接口未启用");
+        if (info.getStatus() != InterfaceInfoStatuEnum.PUBLISH.getCode()) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "接口未启用");
         }
         Gson gson = new Gson();
         Object params = gson.fromJson(requestParams, Object.class);
         String accessKey = loginUser.getAccessKey();
         String secretKey = loginUser.getSecretKey();
-        LiuAShuoClient shuoClient = new LiuAShuoClient(accessKey,secretKey,info.getUrl());
+        LiuAShuoClient shuoClient = new LiuAShuoClient(accessKey, secretKey, clientUrl + "/api/user/a");
         return shuoClient.ByRestfulPost(params);
+    }
+    public static void main(String[] args) {
+
+        //String regex = "http://[^/]+:[0-9]+(/[^/]*)?";
+        //String regex = "http://127\\.0\\.0\\.1:9909/(.*)";
+        //String regex = "http://127\\.0\\.0\\.1:9909(.*)";
+        //String regex = "http://([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}):([0-9]+)(.*)";
+        //String regex = "http://(localhost|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3})):([0-9]+)(.*)";
+        //String url = "http://192.168.127.10:9909/api/user/a";
+        String url = "http://localhost:9909/api/user/a";
+        //String regex = "http://([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}):([0-9]+)(.*)";
+        String regex = "http://(localhost|([0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3})):([0-9]+)(.*)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(url);
+        if (matcher.find()) {
+            System.out.println("IP地址：" + matcher.group(1));
+            System.out.println("端口号：" + matcher.group(2));
+            System.out.println("请求路径：" + matcher.group(3));
+            System.out.println("请求路径：" + matcher.group(4));
+        }
     }
 }
 

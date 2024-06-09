@@ -35,6 +35,11 @@ public class UserController {
 
     // region 登录相关
 
+    @GetMapping("/a")
+    public String a(String user) {
+        System.err.println(user);
+        return user;
+    }
     @PostMapping("/a")
     public String user(@RequestBody User user) {
         System.err.println(user.getUserName());

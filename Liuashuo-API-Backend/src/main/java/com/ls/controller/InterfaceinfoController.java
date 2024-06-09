@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * 帖子接口
+ * 接口
  *
  * @author yupi
  */

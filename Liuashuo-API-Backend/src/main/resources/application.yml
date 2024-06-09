@@ -36,6 +36,6 @@ mybatis-plus:
 
 liuashuo:
   client:
-    access-key: zhangwanting
-    secret-key: zhangwanting
-    url: http://localhost:7529/api/user/a
+#    access-key: zhangwanting
+#    secret-key: zhangwanting
+    url: http://127.0.0.1:9909
