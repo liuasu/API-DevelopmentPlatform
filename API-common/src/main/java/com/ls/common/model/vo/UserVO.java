@@ -1,4 +1,4 @@
-package com.ls.model.vo;
+package com.ls.common.model.vo;
 
 import lombok.Data;
 
