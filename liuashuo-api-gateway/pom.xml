@@ -41,6 +41,22 @@
             <artifactId>liuashuo-client-sdk</artifactId>
             <version>0.0.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo</artifactId>
+            <version>3.0.9</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.nacos</groupId>
+            <artifactId>nacos-client</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ls</groupId>
+            <artifactId>API-common</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
     <dependencyManagement>
         <dependencies>
@@ -78,7 +94,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
                 <configuration>
-                    <mainClass>cn.ls.LiuashuoApiGatewayApplication</mainClass>
+                    <mainClass>com.ls.LiuashuoApiGatewayApplication</mainClass>
                     <skip>true</skip>
                 </configuration>
                 <executions>
