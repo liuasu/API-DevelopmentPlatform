@@ -1,8 +1,10 @@
 package com.ls.service;
 
 
+
+
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.ls.model.entity.User;
+import com.ls.common.model.entity.User;
 
 import javax.servlet.http.HttpServletRequest;
 

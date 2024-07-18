@@ -36,6 +36,17 @@ mybatis-plus:
 
 liuashuo:
   client:
-#    access-key: zhangwanting
-#    secret-key: zhangwanting
+    #    access-key: zhangwanting
+    #    secret-key: zhangwanting
     url: http://127.0.0.1:9909
+
+
+dubbo:
+  application:
+    name: API-provider
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    id: nacos-registry
+    address: nacos://localhost:8899

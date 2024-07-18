@@ -1,7 +1,8 @@
 package com.ls.service;
 
+
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.ls.model.entity.UserInterfaceInfo;
+import com.ls.common.model.entity.UserInterfaceInfo;
 
 /**
 * @author 32093

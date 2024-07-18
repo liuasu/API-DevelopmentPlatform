@@ -1,9 +1,10 @@
 package com.ls.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ls.common.model.entity.InterfaceInfo;
+import com.ls.common.model.entity.User;
 import com.ls.model.dto.interfaceinfo.InterfaceinfoInvokeRequest;
-import com.ls.model.entity.InterfaceInfo;
-import com.ls.model.entity.User;
+
 
 
 public interface InterfaceInfoService extends IService<InterfaceInfo> {

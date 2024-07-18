@@ -7,10 +7,10 @@ import com.ls.common.BaseResponse;
 import com.ls.common.DeleteRequest;
 import com.ls.common.ErrorCode;
 import com.ls.common.ResultUtils;
+import com.ls.common.model.entity.User;
+import com.ls.common.model.vo.UserVO;
 import com.ls.exception.BusinessException;
 import com.ls.model.dto.user.*;
-import com.ls.model.entity.User;
-import com.ls.model.vo.UserVO;
 import com.ls.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -49,8 +49,6 @@ public class UserController {
     /**
      * 用户注册
      *
-     * @param userRegisterRequest
-     * @return
      */
     @PostMapping("/register")
     public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
@@ -70,9 +68,9 @@ public class UserController {
     /**
      * 用户登录
      *
-     * @param userLoginRequest
-     * @param request
-     * @return
+     * @param userLoginRequest 用户登录请求
+     * @param request          请求
+     * @return {@link BaseResponse}<{@link User}>
      */
     @PostMapping("/login")
     public BaseResponse<User> userLogin(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request) {

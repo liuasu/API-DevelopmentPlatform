@@ -1,7 +1,7 @@
 package com.ls.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.ls.model.entity.UserInterfaceInfo;
+import com.ls.common.model.entity.UserInterfaceInfo;
 
 /**
 * @author 32093
